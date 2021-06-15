@@ -33,22 +33,18 @@ public class Server {
                 Socket newClient = serverSocket.accept();
                 Connection connection = new Connection(newClient);
                 connections.add(connection);
-                new Thread(new Writer(connection, connections, queue)).start();
+                new Thread(new Writer(connection)).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static class Writer implements Runnable {
+    private class Writer implements Runnable {
         private final Connection connection;
-        private final List<Connection> connections;
-        private final ArrayBlockingQueue<Message> queue;
 
-        public Writer(Connection connection, List<Connection> connections, ArrayBlockingQueue<Message> queue) {
+        public Writer(Connection connection) {
             this.connection = connection;
-            this.connections = connections;
-            this.queue = queue;
         }
 
         @Override
